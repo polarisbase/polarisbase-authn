@@ -2,8 +2,8 @@ package v1
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/contracts"
-	"github.com/polarisbase/polaris-sdk/v3/shared"
+	"github.com/polarisbase/polarisbase-authn/internal/user/contracts"
+	"github.com/polarisbase/polarisbase-shared"
 )
 
 func (a *Api) Login(c *fiber.Ctx) error {

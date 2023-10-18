@@ -1,6 +1,6 @@
 package v1
 
-import "github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/common"
+import "github.com/polarisbase/polarisbase-authn/internal/user/common"
 
 type Actions struct {
 	dep *common.Dependencies

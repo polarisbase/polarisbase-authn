@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/contracts"
-	"github.com/polarisbase/polaris-sdk/v3/shared"
+	"github.com/polarisbase/polarisbase-authn/internal/user/contracts"
+	"github.com/polarisbase/polarisbase-shared"
 )
 
 func (a *Actions) Lookup(ticket shared.Ticket, request contracts.LookupRequest) (contracts.LookupResponse, error) {

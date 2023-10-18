@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/info/contracts"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/info/model"
-	"github.com/polarisbase/polaris-sdk/v3/shared"
+	"github.com/polarisbase/polarisbase-authn/internal/info/contracts"
+	"github.com/polarisbase/polarisbase-authn/internal/info/model"
+	"github.com/polarisbase/polarisbase-shared"
 )
 
 func (a *Actions) Create(ticket shared.Ticket, request contracts.CreateRequest) (contracts.CreateResponse, error) {

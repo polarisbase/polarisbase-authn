@@ -2,7 +2,7 @@ package store
 
 import (
 	"context"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/info/model"
+	"github.com/polarisbase/polarisbase-authn/internal/info/model"
 )
 
 type InfoStore interface {

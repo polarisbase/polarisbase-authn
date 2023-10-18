@@ -1,9 +1,9 @@
 package user
 
 import (
-	"github.com/polarisbase/polaris-sdk/v3/lib/persist"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/common"
-	v1 "github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/v1"
+	"github.com/polarisbase/polarisbase-authn/internal/user/common"
+	v1 "github.com/polarisbase/polarisbase-authn/internal/user/v1"
+	"github.com/polarisbase/polarisbase-persist"
 )
 
 type ActionsProvider struct {

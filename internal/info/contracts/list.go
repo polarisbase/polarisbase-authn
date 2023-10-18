@@ -1,6 +1,6 @@
 package contracts
 
-import "github.com/polarisbase/polaris-sdk/v3/services/authn/internal/info/model"
+import "github.com/polarisbase/polarisbase-authn/internal/info/model"
 
 type ListRequest struct {
 	Limit  int `json:"limit"`

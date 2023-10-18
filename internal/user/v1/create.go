@@ -2,9 +2,9 @@ package v1
 
 import (
 	"fmt"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/contracts"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/model"
-	"github.com/polarisbase/polaris-sdk/v3/shared"
+	"github.com/polarisbase/polarisbase-authn/internal/user/contracts"
+	"github.com/polarisbase/polarisbase-authn/internal/user/model"
+	"github.com/polarisbase/polarisbase-shared"
 	"golang.org/x/crypto/bcrypt"
 )
 

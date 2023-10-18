@@ -1,10 +1,10 @@
 package common
 
 import (
-	"github.com/polarisbase/polaris-sdk/v3/lib/persist"
-	"github.com/polarisbase/polaris-sdk/v3/lib/persist/document"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/store"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/store/basic_store"
+	"github.com/polarisbase/polarisbase-authn/internal/user/store"
+	"github.com/polarisbase/polarisbase-authn/internal/user/store/basic_store"
+	"github.com/polarisbase/polarisbase-persist"
+	"github.com/polarisbase/polarisbase-persist/document"
 )
 
 type Dependencies struct {

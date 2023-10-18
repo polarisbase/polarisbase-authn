@@ -3,8 +3,8 @@ package basic_store
 import (
 	"context"
 	"github.com/google/uuid"
-	"github.com/polarisbase/polaris-sdk/v3/lib/persist/document"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/info/model"
+	"github.com/polarisbase/polarisbase-authn/internal/info/model"
+	"github.com/polarisbase/polarisbase-persist/document"
 )
 
 type Store struct {

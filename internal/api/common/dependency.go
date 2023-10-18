@@ -2,8 +2,8 @@ package common
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/info"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user"
+	"github.com/polarisbase/polarisbase-authn/internal/info"
+	"github.com/polarisbase/polarisbase-authn/internal/user"
 )
 
 type Dependencies struct {

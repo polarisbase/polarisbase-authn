@@ -2,7 +2,7 @@ package v1
 
 import (
 	"fmt"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/api/common"
+	"github.com/polarisbase/polarisbase-authn/internal/api/common"
 )
 
 type Api struct {

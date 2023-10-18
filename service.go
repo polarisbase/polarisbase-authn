@@ -2,10 +2,10 @@ package authn
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/polarisbase/polaris-sdk/v3/lib/persist/document"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/api"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/info"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user"
+	"github.com/polarisbase/polarisbase-authn/internal/api"
+	"github.com/polarisbase/polarisbase-authn/internal/info"
+	"github.com/polarisbase/polarisbase-authn/internal/user"
+	"github.com/polarisbase/polarisbase-persist/document"
 )
 
 type Service struct {

@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/polarisbase/polaris-sdk/v3/shared"
+	"github.com/polarisbase/polarisbase-shared"
 	"html/template"
 )
 

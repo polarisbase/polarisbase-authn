@@ -2,7 +2,7 @@ package store
 
 import (
 	"context"
-	"github.com/polarisbase/polaris-sdk/v3/services/authn/internal/user/model"
+	"github.com/polarisbase/polarisbase-authn/internal/user/model"
 )
 
 type UserStore interface {
