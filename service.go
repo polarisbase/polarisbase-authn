@@ -23,7 +23,7 @@ type Service struct {
 	api *api.Api
 }
 
-func New(fiberRouter fiber.Router, authApiPrefix string, documentStore document.Store) *Service {
+func New(fiberRouter fiber.Router, namespace string, authApiPrefix string, documentStore document.Store) *Service {
 	// Create the authentication service
 	s := &Service{
 		authApiPrefix: authApiPrefix,
@@ -35,7 +35,7 @@ func New(fiberRouter fiber.Router, authApiPrefix string, documentStore document.
 	// Create the info actions provider
 	s.infoActionsProvider = info.NewActionsProvider(s.documentStore)
 	// Create the user actions provider
-	s.userActionsProvider = user.NewActionsProvider(s.documentStore)
+	s.userActionsProvider = user.NewActionsProvider(namespace, s.documentStore)
 	// Create the authentication API
 	s.api = api.New(s.fiberRouter, s.infoActionsProvider, s.userActionsProvider)
 	// Return the authentication service

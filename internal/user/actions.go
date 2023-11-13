@@ -11,11 +11,11 @@ type ActionsProvider struct {
 	V1  *v1.Actions
 }
 
-func NewActionsProvider(persist persist.Persist) *ActionsProvider {
+func NewActionsProvider(namespace string, persist persist.Persist) *ActionsProvider {
 	// Create the actions provider
 	ap := &ActionsProvider{}
 	// Create the shared dependencies
-	ap.dep = common.NewDependencies(persist)
+	ap.dep = common.NewDependencies(namespace, persist)
 	// Create the v1 actions
 	ap.V1 = v1.New(ap.dep)
 	// Return the actions provider

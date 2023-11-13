@@ -12,7 +12,7 @@ type Dependencies struct {
 	UserStore store.UserStore
 }
 
-func NewDependencies(persist persist.Persist) *Dependencies {
+func NewDependencies(namespace string, persist persist.Persist) *Dependencies {
 
 	d := &Dependencies{}
 
@@ -20,7 +20,7 @@ func NewDependencies(persist persist.Persist) *Dependencies {
 
 	// try and cast the persist document.store
 	if documentStore, ok := persist.(document.Store); ok {
-		d.UserStore = basic_store.New(documentStore)
+		d.UserStore = basic_store.New(namespace, documentStore)
 		return d
 	} else {
 		panic("persist is not a document store, cannot create user store dependency for authn service")
