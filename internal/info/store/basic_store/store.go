@@ -4,16 +4,17 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/polarisbase/polarisbase-authn/internal/info/model"
-	"github.com/polarisbase/polarisbase-persist/document"
+	persist "github.com/polarisbase/polarisbase-persist"
+	"github.com/upper/db/v4"
 )
 
 type Store struct {
-	persistenceStore document.Store
+	bucket         persist.Bucket
+	InfoCollection db.Collection
 }
 
 func (s *Store) List(ctx context.Context, limit int, offset int) (infos []model.Info, err error, ok bool) {
-	b := s.persistenceStore.GetBun()
-	err = b.NewSelect().Model(&infos).Limit(limit).Offset(offset).Scan(ctx)
+	err = s.InfoCollection.Find().All(&infos)
 	if err != nil {
 		return infos, err, false
 	}
@@ -22,23 +23,25 @@ func (s *Store) List(ctx context.Context, limit int, offset int) (infos []model.
 
 func (s *Store) CreateInfo(ctx context.Context, infoIn model.Info) (info model.Info, err error, ok bool) {
 	infoIn.ID = uuid.New().String()
-	b := s.persistenceStore.GetBun()
-	_, err = b.NewInsert().Model(&infoIn).Exec(ctx)
+	err = s.InfoCollection.InsertReturning(&infoIn)
 	if err != nil {
 		return info, err, false
 	}
 	return infoIn, nil, true
 }
 
-func New(persistenceStore document.Store) *Store {
+func New(bucket persist.Bucket) *Store {
 
 	s := &Store{}
 
-	s.persistenceStore = persistenceStore
+	s.bucket = bucket
 
-	s.persistenceStore.MigrateUsing(
-		(*model.Info)(nil),
-	)
+	infoCollection, err := bucket.Collection("info", &model.Info{})
+	if err != nil {
+		panic(err)
+	}
+
+	s.InfoCollection = infoCollection
 
 	return s
 

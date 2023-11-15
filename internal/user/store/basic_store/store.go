@@ -2,37 +2,29 @@ package basic_store
 
 import (
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"github.com/polarisbase/polarisbase-authn/internal/user/model"
-	"github.com/polarisbase/polarisbase-persist/document"
+	persist "github.com/polarisbase/polarisbase-persist"
+	"github.com/upper/db/v4"
+	"strings"
 )
 
 type Store struct {
-	persistenceStore document.Store
-	userTable        string
+	bucket         persist.Bucket
+	UserCollection db.Collection
 }
 
-func (s *Store) ListUsers(ctx context.Context, limit int, offset int) (infos []model.User, err error, ok bool) {
-	b := s.persistenceStore.GetBun()
-	err = b.NewSelect().
-		Model(&infos).
-		ModelTableExpr(fmt.Sprintf("%s AS user", s.userTable)).
-		Limit(limit).
-		Offset(offset).Scan(ctx)
+func (s *Store) ListUsers(ctx context.Context, limit int, offset int) (users []model.User, err error, ok bool) {
+	err = s.UserCollection.Find().All(&users)
 	if err != nil {
-		return infos, err, false
+		return users, err, false
 	}
-	return infos, nil, true
+	return users, nil, true
 }
 
 func (s *Store) CreateUser(ctx context.Context, userIn model.User) (user model.User, err error, ok bool) {
 	userIn.ID = uuid.New().String()
-	b := s.persistenceStore.GetBun()
-	_, err = b.NewInsert().
-		Model(&userIn).
-		ModelTableExpr(fmt.Sprintf("%s AS user", s.userTable)).
-		Exec(ctx)
+	err = s.UserCollection.InsertReturning(&userIn)
 	if err != nil {
 		return user, err, false
 	}
@@ -40,14 +32,13 @@ func (s *Store) CreateUser(ctx context.Context, userIn model.User) (user model.U
 }
 
 func (s *Store) CheckIfEmailIsAlreadyInUse(email string) (err error, ok bool) {
-	b := s.persistenceStore.GetBun()
 	var user model.User
-	err = b.NewSelect().
-		Model(&user).
-		ModelTableExpr(fmt.Sprintf("%s AS user", s.userTable)).
-		Where("email = ?", email).Scan(context.Background())
+	err = s.UserCollection.Find("email", email).One(&user)
 	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
+			return nil, true
+		}
+		if strings.Contains(err.Error(), "no more rows in this result set") {
 			return nil, true
 		}
 		return err, false
@@ -56,11 +47,7 @@ func (s *Store) CheckIfEmailIsAlreadyInUse(email string) (err error, ok bool) {
 }
 
 func (s *Store) LookupByID(getContext context.Context, id string) (user model.User, err error, ok bool) {
-	b := s.persistenceStore.GetBun()
-	err = b.NewSelect().
-		Model(&user).
-		ModelTableExpr(fmt.Sprintf("%s AS user", s.userTable)).
-		Where("id = ?", id).Scan(getContext)
+	err = s.UserCollection.Find("id", id).One(&user)
 	if err != nil {
 		return user, err, false
 	}
@@ -68,33 +55,26 @@ func (s *Store) LookupByID(getContext context.Context, id string) (user model.Us
 }
 
 func (s *Store) LookupByEmail(getContext context.Context, email string) (user model.User, err error, ok bool) {
-	b := s.persistenceStore.GetBun()
-	err = b.NewSelect().
-		Model(&user).
-		ModelTableExpr(fmt.Sprintf("%s AS user", s.userTable)).
-		Where("email = ?", email).Scan(getContext)
+	err = s.UserCollection.Find("email", email).One(&user)
 	if err != nil {
 		return user, err, false
 	}
 	return user, nil, true
 }
 
-func New(namespace string, persistenceStore document.Store) *Store {
+func New(bucket persist.Bucket) *Store {
 
 	s := &Store{}
 
-	s.persistenceStore = persistenceStore
+	s.bucket = bucket
 
-	tableName, err := s.persistenceStore.Migrate(
-		namespace,
-		(*model.User)(nil),
-	)
+	userCollection, err := bucket.Collection("user", model.User{})
 
 	if err != nil {
 		panic(err)
 	}
 
-	s.userTable = tableName
+	s.UserCollection = userCollection
 
 	return s
 

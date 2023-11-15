@@ -5,7 +5,7 @@ import (
 	"github.com/polarisbase/polarisbase-authn/internal/api"
 	"github.com/polarisbase/polarisbase-authn/internal/info"
 	"github.com/polarisbase/polarisbase-authn/internal/user"
-	"github.com/polarisbase/polarisbase-persist/document"
+	persist "github.com/polarisbase/polarisbase-persist"
 )
 
 type Service struct {
@@ -13,8 +13,10 @@ type Service struct {
 	fiberRouter fiber.Router
 	// authApiPrefix is the prefix for all authentication routes
 	authApiPrefix string
-	// documentStore is the document store
-	documentStore document.Store
+	// store is the document store
+	store persist.Store
+	// Bucket is the document bucket
+	Bucket persist.Bucket
 	// infoActionsProvider is the provider for info actions
 	infoActionsProvider *info.ActionsProvider
 	// userActionsProvider is the provider for user actions
@@ -23,19 +25,21 @@ type Service struct {
 	api *api.Api
 }
 
-func New(fiberRouter fiber.Router, namespace string, authApiPrefix string, documentStore document.Store) *Service {
+func New(fiberRouter fiber.Router, namespace string, authApiPrefix string, store persist.Store) *Service {
 	// Create the authentication service
 	s := &Service{
 		authApiPrefix: authApiPrefix,
 	}
 	// Create the document store
-	s.documentStore = documentStore
+	s.store = store
+	// Create the document bucket
+	s.Bucket, _ = store.NewBucket(namespace)
 	// Create a sub-router for the authentication API
 	s.fiberRouter = fiberRouter.Group(s.authApiPrefix)
 	// Create the info actions provider
-	s.infoActionsProvider = info.NewActionsProvider(s.documentStore)
+	s.infoActionsProvider = info.NewActionsProvider(s.Bucket)
 	// Create the user actions provider
-	s.userActionsProvider = user.NewActionsProvider(namespace, s.documentStore)
+	s.userActionsProvider = user.NewActionsProvider(s.Bucket)
 	// Create the authentication API
 	s.api = api.New(s.fiberRouter, s.infoActionsProvider, s.userActionsProvider)
 	// Return the authentication service
